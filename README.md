@@ -22,8 +22,8 @@ The jar to deploy is `build/libs/sample-code-integration-java-1.0.0.jar`.
 
 `libs/` holds the ByteChef SDK jars the code compiles against: `integration-api-1.0.jar` and `workflow-api-1.0.jar`.
 They are `compileOnly` - the server provides them at runtime, so they must not be packed into your jar. To refresh
-them, run `./gradlew :sdks:backend:java:workflow-api:jar :sdks:backend:embedded:integration-api:jar` in the ByteChef
-repository and copy the jars from each module's `build/libs/`.
+them, run `./gradlew :sdks:backend:java:workflow-api:jar :sdks:backend:java:embedded:integration-api:jar` in the
+ByteChef repository and copy the jars from each module's `build/libs/`.
 
 ## Deploy
 
