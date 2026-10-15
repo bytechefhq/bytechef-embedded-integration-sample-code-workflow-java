@@ -23,17 +23,23 @@ output of every task that already ran (under the task's name); `context.input("n
 
 ### Connections
 
-A task names the connections it uses, and calls a component action through one of them:
+A task calls an action of the integration's own component - `googleMail` here - without declaring a connection. It
+runs on the connected user's integration connection, which ByteChef binds when the workflow runs:
 
 ```java
 task("fetchEmails")
-    .connections(connection("googleMail", "gmail"))
-    .perform(context -> context.component("googleMail", "searchEmail", Map.of("maxResults", 10), "gmail"));
+    .perform(context -> context.component("googleMail", "searchEmail", Map.of("maxResults", 10)));
 ```
 
-A connection on the integration's own component - `googleMail` here - is the connected user's integration connection;
-ByteChef binds it when the workflow runs. A connection on any other component (say `slack`) is chosen by an
-administrator in the integration's instance configuration and is the same for every connected user.
+A task that calls any other component (say `slack`) declares that connection and passes its name. An administrator
+chooses it in the integration's instance configuration, and it is the same for every connected user:
+
+```java
+task("notify")
+    .connections(connection("slack", "slack"))
+    .perform(context -> context.component(
+        "slack", "sendChannelMessage", Map.of("channel", "C0123456", "text", "New email"), "slack"));
+```
 
 ## Build
 

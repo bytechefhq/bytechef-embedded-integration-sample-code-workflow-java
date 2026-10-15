@@ -1,6 +1,5 @@
 package org.sample.codeintegration.workflow;
 
-import static com.bytechef.workflow.definition.WorkflowDsl.connection;
 import static com.bytechef.workflow.definition.WorkflowDsl.output;
 import static com.bytechef.workflow.definition.WorkflowDsl.task;
 import static com.bytechef.workflow.definition.WorkflowDsl.trigger;
@@ -28,11 +27,8 @@ public class FetchRecentEmailsWorkflow {
             task("fetchEmails")
                 .label("Fetch Emails")
                 .description("Searches the inbox with the Gmail Search Email action.")
-                // A code task's perform calls actions itself, so it declares the connections it uses; the name is what
-                // perform passes to the action. One on the integration's own component is the connected user's
-                // integration connection; one on any other component is wired by an administrator in the instance
-                // configuration.
-                .connections(connection("googleMail", "gmail"))
+                // A call to the integration's own component needs no declared connection: it runs on the connected
+                // user's integration connection. Declare and name only connections to other components.
                 .perform(FetchRecentEmailsWorkflow::fetchEmails));
 
     private static Object fetchEmails(TaskContext context) throws Exception {
@@ -50,7 +46,7 @@ public class FetchRecentEmailsWorkflow {
 
         searchInput.put("maxResults", maxResults == null ? 10 : maxResults);
 
-        Map<?, ?> result = asMap(context.component("googleMail", "searchEmail", searchInput, "gmail"));
+        Map<?, ?> result = asMap(context.component("googleMail", "searchEmail", searchInput));
 
         List<?> messages = result.get("messages") instanceof List<?> messageList ? messageList : List.of();
 
