@@ -28,9 +28,10 @@ public class FetchRecentEmailsWorkflow {
             task("fetchEmails")
                 .label("Fetch Emails")
                 .description("Searches the inbox with the Gmail Search Email action.")
-                // A task names the connections it uses. One on the integration's own component is the connected
-                // user's integration connection; one on any other component is wired by an administrator in the
-                // instance configuration.
+                // A code task's perform calls actions itself, so it declares the connections it uses; the name is what
+                // perform passes to the action. One on the integration's own component is the connected user's
+                // integration connection; one on any other component is wired by an administrator in the instance
+                // configuration.
                 .connections(connection("googleMail", "gmail"))
                 .perform(FetchRecentEmailsWorkflow::fetchEmails));
 
