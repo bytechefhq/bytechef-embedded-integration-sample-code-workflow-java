@@ -22,9 +22,11 @@ public class NotifySlackOnNewEmailWorkflow {
         .label("Notify Slack on New Email")
         .description("Posts every new email in the connected user's inbox to a Slack channel.")
         .inputs(
+            // Takes its options from Slack's channel input, so the channel is picked from the workspace's channels.
             input("channel")
-                .label("Slack Channel ID")
+                .label("Slack Channel")
                 .type("STRING")
+                .component("slack", 1, "channel")
                 .required(true))
         .triggers(
             trigger("newEmail", "googleMail/v1/newEmailPolling")
