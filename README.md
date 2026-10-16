@@ -7,7 +7,7 @@ handler with `ServiceLoader` and runs each task's `perform` itself.
 
 A code integration is keyed by the component it integrates, `integration(componentName, componentVersion)`, and
 that component must exist on the server. This sample uses the built-in Gmail component, `googleMail` version 1, so
-connecting the integration means connecting a Gmail account. It has two workflows, one class each under
+connecting the integration means connecting a Gmail account. It has three workflows, one class each under
 `org.sample.codeintegration.workflow`:
 
 - `summarizeNewEmail` (`SummarizeNewEmailWorkflow`) starts with the Gmail **New Email** polling trigger
@@ -16,6 +16,11 @@ connecting the integration means connecting a Gmail account. It has two workflow
   created when they connected the integration - there is nothing to declare.
 - `fetchRecentEmails` (`FetchRecentEmailsWorkflow`) starts with a request trigger, so you call it over HTTP. Its
   `fetchEmails` task calls the Gmail **Search Email** action and returns the matching messages as the `emails` output.
+- `notifySlackOnNewEmail` (`NotifySlackOnNewEmailWorkflow`) starts with the same Gmail trigger and takes a required
+  `channel` input, the ID of a Slack channel. Its `postToSlack` task calls the Slack **Send Channel Message** action,
+  and Slack is not the integration's component, so the task declares a `slack` connection and passes its name. An
+  administrator picks that connection when enabling the workflow in the integration's instance configuration; until one
+  is picked the workflow cannot be enabled.
 
 Inside `perform`, `context.input()` returns the workflow inputs, the trigger output (under the trigger's name) and the
 output of every task that already ran (under the task's name); `context.input("newEmail")` returns one of them, and
