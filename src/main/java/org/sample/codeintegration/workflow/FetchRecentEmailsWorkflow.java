@@ -11,9 +11,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Started by a request trigger: awaitWorkflowAndRespond makes a call to the workflow return its outputs.
- */
 public class FetchRecentEmailsWorkflow {
 
     public static final ModifiableWorkflowDefinition WORKFLOW_DEFINITION = workflow("fetchRecentEmails")
@@ -27,8 +24,6 @@ public class FetchRecentEmailsWorkflow {
             task("fetchEmails")
                 .label("Fetch Emails")
                 .description("Searches the inbox with the Gmail Search Email action.")
-                // A call to the integration's own component needs no declared connection: it runs on the connected
-                // user's integration connection. Declare and name only connections to other components.
                 .perform(FetchRecentEmailsWorkflow::fetchEmails));
 
     private static Object fetchEmails(TaskContext context) throws Exception {

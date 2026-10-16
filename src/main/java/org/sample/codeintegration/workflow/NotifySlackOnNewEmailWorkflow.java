@@ -11,18 +11,12 @@ import com.bytechef.workflow.definition.TaskContext;
 import com.bytechef.workflow.definition.WorkflowDsl.ModifiableWorkflowDefinition;
 import java.util.Map;
 
-/**
- * The Gmail trigger runs on the connected user's integration connection. Slack is not the integration's component, so
- * the task declares its connection and passes the name; an administrator picks the Slack connection when enabling the
- * workflow in the integration's instance configuration.
- */
 public class NotifySlackOnNewEmailWorkflow {
 
     public static final ModifiableWorkflowDefinition WORKFLOW_DEFINITION = workflow("notifySlackOnNewEmail")
         .label("Notify Slack on New Email")
         .description("Posts every new email in the connected user's inbox to a Slack channel.")
         .inputs(
-            // Takes its options from Slack's channel input, so the channel is picked from the workspace's channels.
             input("channel")
                 .label("Slack Channel")
                 .type("STRING")

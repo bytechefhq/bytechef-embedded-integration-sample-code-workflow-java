@@ -9,10 +9,6 @@ import com.bytechef.workflow.definition.TaskContext;
 import com.bytechef.workflow.definition.WorkflowDsl.ModifiableWorkflowDefinition;
 import java.util.Map;
 
-/**
- * A Gmail trigger on a Gmail integration runs on the connection the connected user created when they connected the
- * integration - nothing to declare.
- */
 public class SummarizeNewEmailWorkflow {
 
     public static final ModifiableWorkflowDefinition WORKFLOW_DEFINITION = workflow("summarizeNewEmail")

@@ -9,10 +9,6 @@ import org.sample.codeintegration.workflow.FetchRecentEmailsWorkflow;
 import org.sample.codeintegration.workflow.NotifySlackOnNewEmailWorkflow;
 import org.sample.codeintegration.workflow.SummarizeNewEmailWorkflow;
 
-/**
- * A code integration is keyed by the component it integrates. The component must exist on the server - here the
- * built-in Gmail component, version 1.
- */
 @AutoService(IntegrationHandler.class)
 public class SampleIntegrationHandler implements IntegrationHandler {
 
