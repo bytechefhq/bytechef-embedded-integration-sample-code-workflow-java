@@ -26,8 +26,8 @@ public class SummarizeNewEmailWorkflow {
                 .description("Builds a one-line summary of the new email.")
                 .perform(SummarizeNewEmailWorkflow::summarize));
 
-    private static Object summarize(TaskContext context) {
-        Map<?, ?> email = asMap(context.input("newEmail"));
+    private static Object summarize(Map<String, ?> input, TaskContext context) {
+        Map<?, ?> email = asMap(input.get("newEmail"));
 
         String summary = "New email from " + email.get("from") + ": " + email.get("subject");
 

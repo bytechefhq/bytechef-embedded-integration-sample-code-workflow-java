@@ -35,13 +35,13 @@ public class NotifySlackOnNewEmailWorkflow {
                 .connections(connection("slack", "slack"))
                 .perform(NotifySlackOnNewEmailWorkflow::postToSlack));
 
-    private static Object postToSlack(TaskContext context) throws Exception {
-        Map<?, ?> email = asMap(context.input("newEmail"));
+    private static Object postToSlack(Map<String, ?> input, TaskContext context) throws Exception {
+        Map<?, ?> email = asMap(input.get("newEmail"));
 
         String text = "New email from " + email.get("from") + ": " + email.get("subject");
 
         Object message = context.component(
-            "slack", "sendChannelMessage", Map.of("channel", context.input("channel"), "text", text), "slack");
+            "slack", "sendChannelMessage", Map.of("channel", input.get("channel"), "text", text), "slack");
 
         context.log(TaskContext.LogLevel.INFO, "Posted to Slack: " + text);
 

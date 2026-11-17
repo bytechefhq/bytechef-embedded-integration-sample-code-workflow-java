@@ -23,9 +23,11 @@ connecting the integration means connecting a Gmail account. It has three workfl
   connection and passes its name. An administrator picks that connection when enabling the workflow in the integration's
   instance configuration; until one is picked the workflow cannot be enabled, and the channel list stays empty.
 
-Inside `perform`, `context.input()` returns the workflow inputs, the trigger output (under the trigger's name) and the
-output of every task that already ran (under the task's name); `context.input("newEmail")` returns one of them, and
-`context.log(level, message)` writes to the execution log.
+A task's `perform` takes `(input, context)`. `input` is a map of the workflow inputs, the trigger output (under the
+trigger's name) and the output of every task that already ran (under the task's name), so `input.get("newEmail")`
+returns one of them, and `context.log(level, message)` writes to the execution log. A task that reads its connections'
+parameters, to build a request itself, takes `perform(input, connection, context)` instead: `connection` maps each
+declared connection's name to that connection's parameters, credentials included.
 
 ### Connections
 
@@ -34,7 +36,7 @@ runs on the connected user's integration connection, which ByteChef binds when t
 
 ```java
 task("fetchEmails")
-    .perform(context -> context.component("googleMail", "searchEmail", Map.of("maxResults", 10)));
+    .perform((input, context) -> context.component("googleMail", "searchEmail", Map.of("maxResults", 10)));
 ```
 
 A task that calls any other component (say `slack`) declares that connection and passes its name. An administrator
@@ -43,7 +45,7 @@ chooses it in the integration's instance configuration, and it is the same for e
 ```java
 task("notify")
     .connections(connection("slack", "slack"))
-    .perform(context -> context.component(
+    .perform((input, context) -> context.component(
         "slack", "sendChannelMessage", Map.of("channel", "C0123456", "text", "New email"), "slack"));
 ```
 
