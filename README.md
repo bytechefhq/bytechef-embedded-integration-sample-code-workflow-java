@@ -7,7 +7,7 @@ handler with `ServiceLoader` and runs each task's `perform` itself.
 
 A code integration is keyed by the component it integrates, `integration(componentName, componentVersion)`, and
 that component must exist on the server. This sample uses the built-in Gmail component, `googleMail` version 1, so
-connecting the integration means connecting a Gmail account. It has three workflows, one class each under
+connecting the integration means connecting a Gmail account. It has four workflows, one class each under
 `org.sample.codeintegration.workflow`:
 
 - `summarizeNewEmail` (`SummarizeNewEmailWorkflow`) starts with the Gmail **New Email** polling trigger
@@ -28,6 +28,26 @@ trigger's name) and the output of every task that already ran (under the task's 
 returns one of them, and `context.log(level, message)` writes to the execution log. A task that reads its connections'
 parameters, to build a request itself, takes `perform(input, connection, context)` instead: `connection` maps each
 declared connection's name to that connection's parameters, credentials included.
+- `logNewEmailSender` (`LogNewEmailSenderWorkflow`), started by the Gmail **New Email** trigger. Its `describe` task picks the sender and
+  subject out of the new email, and its `logSender` task is a component task that runs the Logger **Info** action with
+  them, so the execution log shows one line per email.
+
+### Component tasks
+
+A task that only runs a component action, with no logic of its own, can name the action by type instead of declaring
+`perform`, with `componentTask(name, type)`, the same way a trigger names its component:
+
+```java
+componentTask("logSender", "logger/v1/info")
+    .parameters(Map.of("text", "New email from ${describe.sender}: ${describe.subject}"))
+```
+
+The type is `<component>/v<version>/<action>`, and `parameters` holds the action's inputs. A `${...}` expression is
+evaluated when the task runs: `"${describe}"` is the whole output of the `describe` task, `"${describe.sender}"` one of
+its fields, and text such as `"New email from ${describe.sender}: ${describe.subject}"` becomes a string with the
+values filled in. A component task declares no connections: when its action needs one, it is bound like the
+same task's in a visual workflow. Importing the integration fails when the component, its version or the action does not exist
+on the server. `componentTask` needs a `workflow-api-1.0.jar` built from a ByteChef version that has component tasks.
 
 ### Connections
 
