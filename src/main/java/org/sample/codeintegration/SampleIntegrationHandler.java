@@ -6,6 +6,7 @@ import com.bytechef.embedded.integration.IntegrationHandler;
 import com.bytechef.embedded.integration.definition.IntegrationDefinition;
 import com.google.auto.service.AutoService;
 import org.sample.codeintegration.workflow.FetchRecentEmailsWorkflow;
+import org.sample.codeintegration.workflow.LogNewEmailSenderWorkflow;
 import org.sample.codeintegration.workflow.NotifySlackOnNewEmailWorkflow;
 import org.sample.codeintegration.workflow.SummarizeNewEmailWorkflow;
 
@@ -17,7 +18,7 @@ public class SampleIntegrationHandler implements IntegrationHandler {
         .version("0.0.1")
         .workflows(
             SummarizeNewEmailWorkflow.WORKFLOW_DEFINITION, FetchRecentEmailsWorkflow.WORKFLOW_DEFINITION,
-            NotifySlackOnNewEmailWorkflow.WORKFLOW_DEFINITION);
+            NotifySlackOnNewEmailWorkflow.WORKFLOW_DEFINITION, LogNewEmailSenderWorkflow.WORKFLOW_DEFINITION);
 
     @Override
     public IntegrationDefinition getDefinition() {
